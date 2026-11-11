@@ -1,4 +1,4 @@
-local ftp = require("gc.ftp")
+local ftp = require("arco.ftp")
 local M = {}
 local CHUNK, MAX_COMMAND, DATA_WAIT = 4096, 8192, 15
 local MAX_SESSIONS = 4

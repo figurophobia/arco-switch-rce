@@ -26,7 +26,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SRC = HERE / "src"
-IDENTITY = ".Gravity Circuit"
+IDENTITY = "arco"
 META = ".nx_save_meta.bin"
 
 
@@ -50,15 +50,15 @@ def syntax_check(files: list[Path]) -> None:
 
 def collect() -> dict[str, Path]:
     """savedata-relative path -> source file."""
-    out = {"main.lua": SRC / "gc" / "main.lua"}
-    for f in sorted((SRC / "gc").glob("*.lua")):
-        out[f"gc/{f.name}"] = f
+    out = {"main.lua": SRC / "arco" / "main.lua"}
+    for f in sorted((SRC / "arco").glob("*.lua")):
+        out[f"arco/{f.name}"] = f
     return out
 
 
 def profiles() -> list[str]:
     """Game-build offset profiles embedded in gc/offsets.lua."""
-    text = (SRC / "gc" / "offsets.lua").read_text(encoding="utf-8")
+    text = (SRC / "arco" / "offsets.lua").read_text(encoding="utf-8")
     return re.findall(r'\bid\s*=\s*"([^"]+)"', text)
 
 
@@ -76,7 +76,7 @@ def main() -> int:
 
     ids = profiles()
     if not ids:
-        raise SystemExit("no offset profiles found in src/gc/offsets.lua")
+        raise SystemExit("no offset profiles found in src/arco/offsets.lua")
     print(f"== profiles: {', '.join(ids)}")
 
     print("== validate")
@@ -113,11 +113,11 @@ def main() -> int:
     print(f"  {args.out}: {args.out.stat().st_size}B")
     print(f"  supports: {', '.join(ids)} (selected at boot by present signature)")
     print(f"  generated JKSV {len(metadata)}-byte metadata; NO account UID")
-    print(f"  WARNING: JKSV restore wipes Gravity Circuit save data")
+    print(f"  WARNING: JKSV restore wipes Arco save data")
     for rel in sorted(files):
         print(f"    + {IDENTITY}/{rel}")
     print(f"    + {META}")
-    print("  next: copy zip to JKSV/Gravity Circuit/ on SD card and restore")
+    print("  next: copy zip to JKSV/Arco/ on SD card and restore")
     return 0
 
 

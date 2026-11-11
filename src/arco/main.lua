@@ -5,15 +5,15 @@ function love.load()
     -- Game's conf.lua sets t.window = false, so create window here
     if love.window and not love.window.isOpen() then
         love.window.setMode(960, 540, {resizable = false})
-        love.window.setTitle("GravCirc-Switch-RCE")
+        love.window.setTitle("Arco-Switch-RCE")
     end
 
-    local ok, app = pcall(require, "gc.app")
+    local ok, app = pcall(require, "arco.app")
     if ok then
-        app.boot("Gravity Circuit", "gravity-circuit")
+        app.boot("Arco", "arco")
     else
-        pcall(love.filesystem.append, "gc_log.txt",
-            "[main] require gc.app: " .. tostring(app) .. "\n")
+        pcall(love.filesystem.append, "arco_log.txt",
+            "[main] require arco.app: " .. tostring(app) .. "\n")
         -- Fallback: show error directly
         love.graphics.setBackgroundColor(0.1, 0, 0)
     end
@@ -32,7 +32,7 @@ end
 
 function love.errorhandler(msg)
     local text = "error:\n" .. tostring(msg) .. "\n\n" .. debug.traceback("", 2)
-    pcall(love.filesystem.append, "gc_log.txt", "[main] " .. text .. "\n")
+    pcall(love.filesystem.append, "arco_log.txt", "[main] " .. text .. "\n")
     if not (love.graphics and love.event) then return end
     if love.window and not love.window.isOpen() then
         pcall(love.window.setMode, 960, 540)

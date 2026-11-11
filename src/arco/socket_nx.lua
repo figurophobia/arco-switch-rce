@@ -1,8 +1,8 @@
 -- Switch socket transport using nn::nifm / nn::socket via FFI gadget dispatch.
 -- Same API as socket_pc.lua: new() returns {initialize, listener, close, transport}.
 -- Ported from balatro-switch-rce's bl/socket.lua for love-save-shadow.
-local ffi_call = require("gc.ffi_call")
-local types = require("gc.socket_types")
+local ffi_call = require("arco.ffi_call")
+local types = require("arco.socket_types")
 local bit = require("bit")
 local M = {}
 

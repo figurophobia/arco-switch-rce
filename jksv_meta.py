@@ -17,7 +17,7 @@ import time
 FORMAT = "<4sBQ16sQBBHQQIqqQB"
 SIZE = struct.calcsize(FORMAT)
 assert SIZE == 86
-APP_ID = 0x01008D9019128000  # Gravity Circuit
+APP_ID = 0x0100E6601ACB6000  # Arco Switch title id
 SAVE_SIZE = 16 * 1024 * 1024
 JOURNAL_SIZE = 16 * 1024 * 1024
 

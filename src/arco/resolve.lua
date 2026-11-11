@@ -8,8 +8,8 @@
 -- expect.present_head signature picks the right one for the running build.
 -- Ported from balatro-switch-rce's bl/resolve.lua for the love-save-shadow launcher.
 
-local log = require("gc.log")
-local offsets = require("gc.offsets")
+local log = require("arco.log")
+local offsets = require("arco.offsets")
 
 local M = {}
 

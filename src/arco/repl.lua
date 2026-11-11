@@ -1,4 +1,4 @@
-local log = require("gc.log")
+local log = require("arco.log")
 local M = {}
 
 function M.evaluate(body, extras)

@@ -1,4 +1,4 @@
-local log = require("gc.log")
+local log = require("arco.log")
 local M = { visible = true, font = nil, font_size = 0 }
 
 M.clock = nil
@@ -64,7 +64,7 @@ function M.draw(status)
     color(g, C.bar); g.rectangle("fill", 0, 0, w, bar)
     color(g, C.border); g.rectangle("fill", 0, bar - 3, w, 3)
 
-    local title = "GravCirc-RCE"
+    local title = "Arco-RCE"
     local state = tostring(status or "")
     local clock = M.clock and M.clock() or ""
 
