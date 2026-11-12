@@ -1,5 +1,5 @@
-local log = require("arco.log")
-local console = require("arco.console")
+local log = require("ar.log")
+local console = require("ar.console")
 
 local M = { installed = {}, original = {}, ours = {}, wrappers = nil }
 

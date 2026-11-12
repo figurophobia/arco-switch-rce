@@ -9,7 +9,7 @@
 -- explanation and the two measured LuaJIT defects (broken 64-bit literals
 -- and broken cdata equality).
 
-local jffi = require("arco.jffi")
+local jffi = require("ar.jffi")
 
 local M = {}
 

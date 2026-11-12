@@ -1,7 +1,7 @@
 -- love.ffi API surface for the launcher.
 -- Installs onto the love table: love.ffi.declare, love.ffi.invoke, etc.
 -- Ported from balatro-switch-rce's bl/call.lua.
-local ffi_call = require("arco.ffi_call")
+local ffi_call = require("ar.ffi_call")
 local M = {}
 
 function M.install(love_table, ffi, victim, info, backend)

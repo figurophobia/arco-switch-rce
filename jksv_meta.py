@@ -2,10 +2,17 @@
 
 Exact schema: https://github.com/J-D-K/JKSV/blob/rewrite/include/fs/SaveMetaData.hpp
 
-The account UID is ZERO — no personal profile is embedded. This metadata is
+The account UID is ZERO - no personal profile is embedded. This metadata is
 safe to redistribute. JKSV restore wipes the target save before restoring,
 which is intentional: the launcher shadows main.lua and does not need the
 game's original save files.
+
+Title ID and save sizes are Arco's as observed in a vanilla Switch save
+backup (0100E6601ACB6000, 4 MiB save / 1 MiB journal). The same profile
+covers the v1.2.0 update (0100E6601ACB6800) because its main+sdk NSOs are
+byte-identical to the base build's; the launcher picks the matching
+offset profile at boot through the present-code signature in
+src/ar/offsets.lua.
 
 Based on jksv_meta.py from balatro-switch-rce by Luminger.
 """
@@ -17,9 +24,9 @@ import time
 FORMAT = "<4sBQ16sQBBHQQIqqQB"
 SIZE = struct.calcsize(FORMAT)
 assert SIZE == 86
-APP_ID = 0x0100E6601ACB6000  # Arco Switch title id
-SAVE_SIZE = 16 * 1024 * 1024
-JOURNAL_SIZE = 16 * 1024 * 1024
+APP_ID = 0x0100E6601ACB6000  # Arco
+SAVE_SIZE = 4 * 1024 * 1024
+JOURNAL_SIZE = 1 * 1024 * 1024
 
 
 def encode(*, timestamp: int | None = None) -> bytes:

@@ -1,21 +1,26 @@
--- Fix arg table that the game's conf.lua nils out
+-- Savedata shadow of Arco's main.lua. LÖVE mounts the save dir ahead of
+-- romfs when setIdentity is called with appendidentity=false, so this file
+-- wins over the one shipped in the cart. The game's own main.lua never
+-- runs: we boot the launcher (gc-style app, renamed ar.*) and keep the
+-- process alive painting the launcher console and servicing RPC/FTP.
+
 if arg == nil then arg = {} end
 
 function love.load()
-    -- Game's conf.lua sets t.window = false, so create window here
     if love.window and not love.window.isOpen() then
-        love.window.setMode(960, 540, {resizable = false})
-        love.window.setTitle("Arco-Switch-RCE")
+        pcall(love.window.setMode, 1280, 720, {resizable = false})
+        pcall(love.window.setTitle, "arco-switch-rce")
     end
 
-    local ok, app = pcall(require, "arco.app")
+    local ok, app = pcall(require, "ar.app")
     if ok then
         app.boot("Arco", "arco")
     else
-        pcall(love.filesystem.append, "arco_log.txt",
-            "[main] require arco.app: " .. tostring(app) .. "\n")
-        -- Fallback: show error directly
-        love.graphics.setBackgroundColor(0.1, 0, 0)
+        pcall(love.filesystem.append, "ar_log.txt",
+            "[main] require ar.app: " .. tostring(app) .. "\n")
+        if love.graphics and love.graphics.setBackgroundColor then
+            love.graphics.setBackgroundColor(0.1, 0, 0)
+        end
     end
 end
 
@@ -32,10 +37,10 @@ end
 
 function love.errorhandler(msg)
     local text = "error:\n" .. tostring(msg) .. "\n\n" .. debug.traceback("", 2)
-    pcall(love.filesystem.append, "arco_log.txt", "[main] " .. text .. "\n")
+    pcall(love.filesystem.append, "ar_log.txt", "[main] " .. text .. "\n")
     if not (love.graphics and love.event) then return end
     if love.window and not love.window.isOpen() then
-        pcall(love.window.setMode, 960, 540)
+        pcall(love.window.setMode, 1280, 720)
     end
     local font = love.graphics.newFont(14)
     while true do

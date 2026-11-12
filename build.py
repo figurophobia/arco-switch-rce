@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Build the Gravity Circuit launcher savegame archive for a JKSV restore.
+"""Build the Arco launcher savegame archive for a JKSV restore.
 
-    .Gravity Circuit/main.lua       shadows the cart's main.lua
-    .Gravity Circuit/gc/*.lua       exploit modules (JankFFI, RPC, FTP, ...)
+    .arco/main.lua       shadows the cart's main.lua
+    .arco/ar/*.lua       exploit modules (JankFFI, RPC, FTP, ...)
 
 JKSV metadata is generated from the documented packed struct, with a zero
 account UID. No exported ZIP or personal profile needed. JKSV wipes the
 existing save on restore.
 
-Based on build.py from balatro-switch-rce by Luminger.
+Based on build.py from balatro-switch-rce by Luminger / GravCirc-Switch-rce.
 
 Usage:
-  python3 build.py -o GC-v1.0.zip
+  python3 build.py -o Arco-launcher.zip
 """
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SRC = HERE / "src"
-IDENTITY = "arco"
+IDENTITY = ".arco"
 META = ".nx_save_meta.bin"
 
 
@@ -50,15 +50,15 @@ def syntax_check(files: list[Path]) -> None:
 
 def collect() -> dict[str, Path]:
     """savedata-relative path -> source file."""
-    out = {"main.lua": SRC / "arco" / "main.lua"}
-    for f in sorted((SRC / "arco").glob("*.lua")):
-        out[f"arco/{f.name}"] = f
+    out = {"main.lua": SRC / "ar" / "main.lua"}
+    for f in sorted((SRC / "ar").glob("*.lua")):
+        out[f"ar/{f.name}"] = f
     return out
 
 
 def profiles() -> list[str]:
-    """Game-build offset profiles embedded in gc/offsets.lua."""
-    text = (SRC / "arco" / "offsets.lua").read_text(encoding="utf-8")
+    """Game-build offset profiles embedded in ar/offsets.lua."""
+    text = (SRC / "ar" / "offsets.lua").read_text(encoding="utf-8")
     return re.findall(r'\bid\s*=\s*"([^"]+)"', text)
 
 
@@ -76,7 +76,7 @@ def main() -> int:
 
     ids = profiles()
     if not ids:
-        raise SystemExit("no offset profiles found in src/arco/offsets.lua")
+        raise SystemExit("no offset profiles found in src/ar/offsets.lua")
     print(f"== profiles: {', '.join(ids)}")
 
     print("== validate")

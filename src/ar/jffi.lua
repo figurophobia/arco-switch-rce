@@ -10,7 +10,7 @@
 --   call0(target)          — zero-arg, return = nresults (small values only)
 --   call_ptr(thunk, ctrl)  — pointer-arg via coroutine lua_State borrowing
 
-local log = require("arco.log")
+local log = require("ar.log")
 
 local M = { FUNC_F = 0x28, L_SLOT = 0x18, VT_CALLEE = 0x18 }
 

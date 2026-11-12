@@ -1,6 +1,6 @@
-local log     = require("arco.log")
-local console = require("arco.console")
-local hooks   = require("arco.hooks")
+local log     = require("ar.log")
+local console = require("ar.console")
+local hooks   = require("ar.hooks")
 
 local M = {state = "first-frame", log = log, console = console, hooks = hooks}
 local REPL_PORT, FTP_PORT, PASV_PORT = 9026, 5000, 5001
@@ -41,19 +41,19 @@ end
 
 local function start_nx_network()
     local ffi = require("ffi")
-    local resolve = require("arco.resolve")
+    local resolve = require("ar.resolve")
     local info, why = resolve.resolve(ffi, M.game_id)
     if not info then return nil, "resolve: " .. tostring(why) end
     log.log("[NX] resolved: main=" .. string.format("0x%x", info.main_base)
             .. " sdk=" .. string.format("0x%x", info.sdk_base))
 
-    local ffi_call = require("arco.ffi_call")
+    local ffi_call = require("ar.ffi_call")
     local ok_pf, pf_why = ffi_call.preflight(ffi, info)
     if not ok_pf then return nil, "preflight: " .. tostring(pf_why) end
     log.log("[NX] gadget preflight passed")
 
     local victim = love.graphics.present
-    local socket_nx = require("arco.socket_nx")
+    local socket_nx = require("ar.socket_nx")
     local net = socket_nx.new(ffi, victim, info)
     M.nx_info = info
     return net
@@ -70,7 +70,7 @@ local function start_network()
         end
         net = nx_net
     elseif not M.net then
-        local socket_mod = require("arco.socket_pc")
+        local socket_mod = require("ar.socket_pc")
         net = socket_mod.new()
     end
     net = M.net or net
@@ -105,10 +105,10 @@ local function start_network()
 
     local built, err = pcall(function()
         local io = net:transport()
-        M.rpc = require("arco.rpc").new(io, rpc_fd, function(body)
-            return require("arco.repl").evaluate(body, {LS = M})
+        M.rpc = require("ar.rpc").new(io, rpc_fd, function(body)
+            return require("ar.repl").evaluate(body, {LS = M})
         end, {on_event = events("RPC")})
-        M.ftp = require("arco.ftp_server").new(io, love.filesystem,
+        M.ftp = require("ar.ftp_server").new(io, love.filesystem,
             ftp_fd, pasv_fd, net.ip, PASV_PORT, nil, events("FTP"))
     end)
     if not built then
@@ -143,7 +143,12 @@ function M.tick(dt)
     end
     if M.state == "connecting" then
         if M.net_pending and love.timer.getTime() < M.net_retry then return end
-        local started = pcall(start_network)
+        local started, started_err = xpcall(start_network, function(e)
+            return tostring(e) .. "\n" .. debug.traceback("", 2)
+        end)
+        if not started then
+            log.log("[ERROR] start_network pcall: " .. tostring(started_err))
+        end
         if M.net and M.net.ip and M.rpc then
             M.state = "serving"
             log.phase("app:serving")
@@ -164,7 +169,7 @@ function M.boot(game_name, game_id)
     if rawget(_G, "__LS") then return rawget(_G, "__LS") end
     rawset(_G, "__LS", M)
     M.game_name = game_name or "unknown"
-    M.game_id = game_id or "arco"
+    M.game_id = game_id or "gravity-circuit"
     console.clock = M.clock
     hooks.install({update = M.tick, status = status,
                    frame_drawn = function() M.frame_ready = true end})

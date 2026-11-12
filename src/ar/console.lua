@@ -1,4 +1,4 @@
-local log = require("arco.log")
+local log = require("ar.log")
 local M = { visible = true, font = nil, font_size = 0 }
 
 M.clock = nil

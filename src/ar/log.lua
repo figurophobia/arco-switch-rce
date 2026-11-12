@@ -1,7 +1,7 @@
 local M = { lines = {}, max = 160, build_id = "identifying",
-            CREDIT = "https://github.com/figurophobia/Arco-Switch-rce" }
+            CREDIT = "https://github.com/figurophobia/arco-switch-rce" }
 
-local LOG_FILE, PHASE_FILE = "arco_log.txt", "gc_phase.txt"
+local LOG_FILE, PHASE_FILE = "ar_log.txt", "ar_phase.txt"
 
 local anchor_wall, anchor_mono = nil, nil
 

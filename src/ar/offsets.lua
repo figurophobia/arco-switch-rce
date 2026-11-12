@@ -16,7 +16,11 @@
 
 local ARCO_SDK = {
     mod0 = 0x8,
-    memcpy = 0x5947b0,
+    -- Balatro/GC's sdk had memcpy = 0x5947b0 but that is the thunk's entry; Arco's
+    -- dynamic linker resolves the GOT slot straight to the real memcpy body 16
+    -- bytes later at 0x5947c0. Verified live against the runtime GOT target with
+    -- sys-botbase: peekAbsolute(got_memcpy)[16] == e80301cb0a0940925f0102eb62040054.
+    memcpy = 0x5947c0,
 
     nifm_init = 0x38cca0,
     nifm_submit_now = 0x38dc40,
@@ -61,7 +65,7 @@ local ARCO_V0 = {
     sdk = ARCO_SDK,
     expect = {
         present_head = "fd7bbea9f44f01a9fd030091281400d0",
-        memcpy_head = "00018a9abbffff17e0030aaab9ffff17",
+        memcpy_head = "e80301cb0a0940925f0102eb62040054",
     },
 }
 
